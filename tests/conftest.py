@@ -44,7 +44,15 @@ class BookTestGateway(BookDatabaseGateway):
         return []
 
     def update_book_status(self, book_id: int, status: BookStatus) -> Optional[Book]:
-        pass
+        if book_id == 1:
+            return Book(
+                id=1,
+                title="Test Book",
+                author="Test Author",
+                year=2024,
+                status=BookStatus.ISSUED
+            )
+        return None
 
     def get_all_books(self) -> list[Book]:
         pass
