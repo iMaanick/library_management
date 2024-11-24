@@ -4,7 +4,7 @@ from typing import Optional
 from app.application.models import Book, BookStatus
 
 
-class DbGateway(ABC):
+class BookDatabaseGateway(ABC):
     @abstractmethod
     def add_book(self, title: str, author: str, year: int) -> Book:
         raise NotImplementedError
@@ -20,9 +20,9 @@ class DbGateway(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_book_by_id(self, book_id: int) -> Optional[Book]:
+    def update_book_status(self, book_id: int, status: BookStatus) -> Optional[Book]:
         raise NotImplementedError
 
     @abstractmethod
-    def update_book_status(self, book_id: int, status: BookStatus) -> Optional[Book]:
+    def get_all_books(self) -> list[Book]:
         raise NotImplementedError

@@ -1,8 +1,8 @@
+import enum
 from dataclasses import dataclass
-from enum import Enum
 
 
-class BookStatus(str, Enum):
+class BookStatus(str, enum.Enum):
     AVAILABLE = "в наличии"
     ISSUED = "выдана"
 

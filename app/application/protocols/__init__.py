@@ -1,5 +1,5 @@
 __all__ = [
-    "DbGateway",
+    "BookDatabaseGateway",
 ]
 
-from .database import DbGateway
+from .database import BookDatabaseGateway

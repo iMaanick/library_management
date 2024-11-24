@@ -1,9 +1,10 @@
-import enum
-
 from sqlalchemy import Integer, String, Enum
 from sqlalchemy.orm import mapped_column, Mapped
 
 from app.adapters.sqlalchemy_db.models import Base
+from app.application import models
+
+import enum
 
 
 class BookStatus(str, enum.Enum):
@@ -19,3 +20,12 @@ class Book(Base):
     author: Mapped[str] = mapped_column(String, nullable=False)
     year: Mapped[int] = mapped_column(Integer, nullable=False)
     status: Mapped[BookStatus] = mapped_column(Enum(BookStatus), default=BookStatus.AVAILABLE)
+
+    def to_dto(self) -> models.Book:
+        return models.Book(
+            id=self.id,
+            title=self.title,
+            author=self.author,
+            year=self.year,
+            status=self.status
+        )
