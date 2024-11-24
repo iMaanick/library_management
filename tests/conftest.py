@@ -34,7 +34,14 @@ class BookTestGateway(BookDatabaseGateway):
     def search_books(
             self, title: Optional[str] = None, author: Optional[str] = None, year: Optional[int] = None
     ) -> list[Book]:
-        pass
+        if title == "Test Book" or all(field is None for field in [title, author, year]):
+            return [Book(
+                id=1,
+                title="Test Book",
+                author="Test Author",
+                year=2024
+            )]
+        return []
 
     def update_book_status(self, book_id: int, status: BookStatus) -> Optional[Book]:
         pass
