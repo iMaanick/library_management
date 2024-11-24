@@ -22,7 +22,14 @@ class BookTestGateway(BookDatabaseGateway):
         )
 
     def delete_book(self, book_id: int) -> Optional[Book]:
-        pass
+        if book_id == 1:
+            return Book(
+                id=1,
+                title="Test Book",
+                author="Test Author",
+                year=2024
+            )
+        return None
 
     def search_books(
             self, title: Optional[str] = None, author: Optional[str] = None, year: Optional[int] = None
