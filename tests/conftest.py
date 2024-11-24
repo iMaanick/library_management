@@ -55,7 +55,12 @@ class BookTestGateway(BookDatabaseGateway):
         return None
 
     def get_all_books(self) -> list[Book]:
-        pass
+        return [Book(
+            id=1,
+            title="Test Book",
+            author="Test Author",
+            year=2024
+        )]
 
 
 class TestAdaptersProvider(Provider):
