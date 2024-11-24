@@ -7,9 +7,7 @@ from app.application.models import BookStatus
 from app.main.di import AdaptersProvider, ServiceProvider
 
 
-@click.group()
-@click.pass_context
-def main(context: click.Context):
+def cli(context: click.Context):
     container = make_container(AdaptersProvider(), ServiceProvider())
     setup_dishka(container=container, context=context, auto_inject=True)
 
@@ -69,9 +67,3 @@ def list_books(book_service: FromDishka[BookService]):
         click.echo(f"ID: {book.id}, Title: {book.title}, Author: {book.author}, "
                    f"Year: {book.year}, Status: {book.status.value}")
 
-
-main.add_command(add, name="add")
-main.add_command(delete, name="delete")
-main.add_command(search, name="search")
-main.add_command(update_status, name="update_status")
-main.add_command(list_books, name="list_books")
