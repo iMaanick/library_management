@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["imaanick <nickolaytrusov01@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = "^0.13.1"
+sqlalchemy = "^2.0.36"
+alembic = "^1.14.0"
+python-dotenv = "^1.0.1"
+dishka = "^1.4.1"
+click = "^8.1.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
