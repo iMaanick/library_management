@@ -3,6 +3,7 @@ from dishka import FromDishka, make_container
 from dishka.integrations.click import setup_dishka
 
 from app.application.book_service import BookService
+from app.application.commands import validate_year
 from app.application.models import BookStatus
 from app.main.di import AdaptersProvider, ServiceProvider
 
@@ -17,6 +18,11 @@ def cli(context: click.Context):
 @click.argument("author")
 @click.argument("year", type=int)
 def add(title: str, author: str, year: int, book_service: FromDishka[BookService]):
+    try:
+        validate_year(year)
+    except ValueError as e:
+        click.echo(click.style("Error: ", fg="red") + f"{e}")
+        return
     book = book_service.add_book(title, author, year)
     click.echo(f"Added book {book.title} with ID: {book.id}")
 
@@ -28,7 +34,7 @@ def delete(book_id: int, book_service: FromDishka[BookService]):
         book = book_service.delete_book(book_id)
         click.echo(f"Deleted book {book.title} with ID: {book.id}")
     except ValueError as e:
-        click.echo(f"Error: {e}")
+        click.echo(click.style("Error: ", fg="red") + f"{e}")
 
 
 @click.command()
@@ -36,6 +42,11 @@ def delete(book_id: int, book_service: FromDishka[BookService]):
 @click.option("--author", default=None, help="Search by author")
 @click.option("--year", default=None, type=int, help="Search by year")
 def search(title: str, author: str, year: int, book_service: FromDishka[BookService]):
+    try:
+        validate_year(year)
+    except ValueError as e:
+        click.echo(click.style("Error: ", fg="red") + f"{e}")
+        return
     books = book_service.search_books(title, author, year)
     if not books:
         click.echo("No books found")
@@ -53,7 +64,7 @@ def update_status(book_id: int, status: str, book_service: FromDishka[BookServic
         book = book_service.update_book_status(book_id, BookStatus(status))
         click.echo(f"Updated status for book ID {book.id} to {book.status}")
     except ValueError as e:
-        click.echo(f"Error: {e}")
+        click.echo(click.style("Error: ", fg="red") + f"{e}")
 
 
 @click.command()
@@ -66,4 +77,3 @@ def list_books(book_service: FromDishka[BookService]):
     for book in books:
         click.echo(f"ID: {book.id}, Title: {book.title}, Author: {book.author}, "
                    f"Year: {book.year}, Status: {book.status.value}")
-
