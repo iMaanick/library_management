@@ -52,10 +52,10 @@ class BookSqlGateway(BookDatabaseGateway):
             query = select(models.Book).where(models.Book.id == book_id)
             result = session.execute(query).scalars().first()
             if result:
-                result.status = status
+                result.status = models.BookStatus(status)
                 session.commit()
                 session.refresh(result)
-                return result
+                return result.to_dto()
 
             return None
 

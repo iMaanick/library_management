@@ -27,5 +27,5 @@ class Book(Base):
             title=self.title,
             author=self.author,
             year=self.year,
-            status=self.status
+            status=models.BookStatus(self.status)
         )

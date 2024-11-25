@@ -8,7 +8,7 @@ from app.application.models import BookStatus
 from app.main.di import AdaptersProvider, ServiceProvider
 
 
-def cli(context: click.Context):
+def cli(context: click.Context) -> None:
     container = make_container(AdaptersProvider(), ServiceProvider())
     setup_dishka(container=container, context=context, auto_inject=True)
 
@@ -17,7 +17,7 @@ def cli(context: click.Context):
 @click.argument("title")
 @click.argument("author")
 @click.argument("year", type=int)
-def add(title: str, author: str, year: int, book_service: FromDishka[BookService]):
+def add(title: str, author: str, year: int, book_service: FromDishka[BookService]) -> None:
     try:
         validate_year(year)
     except ValueError as e:
@@ -29,7 +29,7 @@ def add(title: str, author: str, year: int, book_service: FromDishka[BookService
 
 @click.command()
 @click.argument("book_id", type=int)
-def delete(book_id: int, book_service: FromDishka[BookService]):
+def delete(book_id: int, book_service: FromDishka[BookService]) -> None:
     try:
         book = delete_book(book_id, book_service)
         click.echo(f"Deleted book {book.title} with ID: {book.id}")
@@ -41,7 +41,7 @@ def delete(book_id: int, book_service: FromDishka[BookService]):
 @click.option("--title", default=None, help="Search by title")
 @click.option("--author", default=None, help="Search by author")
 @click.option("--year", default=None, type=int, help="Search by year")
-def search(title: str, author: str, year: int, book_service: FromDishka[BookService]):
+def search(title: str, author: str, year: int, book_service: FromDishka[BookService]) -> None:
     try:
         validate_year(year)
     except ValueError as e:
@@ -59,7 +59,7 @@ def search(title: str, author: str, year: int, book_service: FromDishka[BookServ
 @click.command()
 @click.argument("book_id", type=int)
 @click.argument("status", type=click.Choice(["в наличии", "выдана"]))
-def update_status(book_id: int, status: str, book_service: FromDishka[BookService]):
+def update_status(book_id: int, status: str, book_service: FromDishka[BookService]) -> None:
     try:
         book = update_book_status(book_id, BookStatus(status), book_service)
         click.echo(f"Updated status for book ID {book.id} to {book.status}")
@@ -68,7 +68,7 @@ def update_status(book_id: int, status: str, book_service: FromDishka[BookServic
 
 
 @click.command()
-def list_books(book_service: FromDishka[BookService]):
+def list_books(book_service: FromDishka[BookService]) -> None:
     books = get_books(book_service)
     if not books:
         click.echo("No books found in the library.")
