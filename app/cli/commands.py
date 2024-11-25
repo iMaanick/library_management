@@ -3,7 +3,7 @@ from dishka import FromDishka, make_container
 from dishka.integrations.click import setup_dishka
 
 from app.application.book_service import BookService
-from app.application.commands import validate_year
+from app.application.commands import validate_year, add_book, delete_book, search_books, update_book_status, get_books
 from app.application.models import BookStatus
 from app.main.di import AdaptersProvider, ServiceProvider
 
@@ -23,7 +23,7 @@ def add(title: str, author: str, year: int, book_service: FromDishka[BookService
     except ValueError as e:
         click.echo(click.style("Error: ", fg="red") + f"{e}")
         return
-    book = book_service.add_book(title, author, year)
+    book = add_book(title, author, year, book_service)
     click.echo(f"Added book {book.title} with ID: {book.id}")
 
 
@@ -31,7 +31,7 @@ def add(title: str, author: str, year: int, book_service: FromDishka[BookService
 @click.argument("book_id", type=int)
 def delete(book_id: int, book_service: FromDishka[BookService]):
     try:
-        book = book_service.delete_book(book_id)
+        book = delete_book(book_id, book_service)
         click.echo(f"Deleted book {book.title} with ID: {book.id}")
     except ValueError as e:
         click.echo(click.style("Error: ", fg="red") + f"{e}")
@@ -47,7 +47,7 @@ def search(title: str, author: str, year: int, book_service: FromDishka[BookServ
     except ValueError as e:
         click.echo(click.style("Error: ", fg="red") + f"{e}")
         return
-    books = book_service.search_books(title, author, year)
+    books = search_books(title, author, year, book_service)
     if not books:
         click.echo("No books found")
         return
@@ -61,7 +61,7 @@ def search(title: str, author: str, year: int, book_service: FromDishka[BookServ
 @click.argument("status", type=click.Choice(["в наличии", "выдана"]))
 def update_status(book_id: int, status: str, book_service: FromDishka[BookService]):
     try:
-        book = book_service.update_book_status(book_id, BookStatus(status))
+        book = update_book_status(book_id, BookStatus(status), book_service)
         click.echo(f"Updated status for book ID {book.id} to {book.status}")
     except ValueError as e:
         click.echo(click.style("Error: ", fg="red") + f"{e}")
@@ -69,7 +69,7 @@ def update_status(book_id: int, status: str, book_service: FromDishka[BookServic
 
 @click.command()
 def list_books(book_service: FromDishka[BookService]):
-    books = book_service.get_books()
+    books = get_books(book_service)
     if not books:
         click.echo("No books found in the library.")
         return

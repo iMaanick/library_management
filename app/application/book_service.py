@@ -3,7 +3,7 @@ from app.application.protocols import BookDatabaseGateway
 
 
 class BookService:
-    def __init__(self, db: BookDatabaseGateway):
+    def __init__(self, db: BookDatabaseGateway) -> None:
         self.db = db
 
     def add_book(self, title: str, author: str, year: int) -> Book:
@@ -15,14 +15,14 @@ class BookService:
             raise ValueError(f"Book with ID {book_id} not found.")
         return book
 
-    def search_books(self, title: str = None, author: str = None, year: int = None):
+    def search_books(self, title: str = None, author: str = None, year: int = None) -> list[Book]:
         return self.db.search_books(title, author, year)
 
-    def update_book_status(self, book_id: int, status: BookStatus):
+    def update_book_status(self, book_id: int, status: BookStatus) -> Book:
         book = self.db.update_book_status(book_id, status)
         if not book:
             raise ValueError(f"Book with ID {book_id} not found.")
         return book
 
-    def get_books(self):
+    def get_books(self) -> list[Book]:
         return self.db.get_all_books()
