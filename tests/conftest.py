@@ -69,18 +69,18 @@ class TestAdaptersProvider(Provider):
         return BookTestGateway()
 
 
-def cli(context: click.Context):
+def cli(context: click.Context) -> None:
     container = make_container(TestAdaptersProvider(), ServiceProvider())
     setup_dishka(container=container, context=context, auto_inject=True)
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
     return CliRunner()
 
 
 @pytest.fixture
-def test_cli():
+def test_cli() -> click.Group:
     test_cli = cli
     test_cli = click.pass_context(test_cli)
     test_cli = click.group(test_cli)
